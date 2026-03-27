@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Course Matematika - SMP Avisena</title>
+    <!-- Font Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    
+    <style>
+        :root {
+            /* --- DARK MODE (Default) --- */
+            --bg-gradient: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0052d4);
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --card-bg: #1a2a3a; /* Warna solid agar teks terlihat */
+            --text-main: #ffffff;
+            --text-muted: #cbd5e0;
+            --accent: #4facfe;
+            --stamp-color: #00ff88;
+            --panel-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            /* --- LIGHT MODE (Perbaikan Kontras) --- */
+            --bg-gradient: linear-gradient(-45deg, #f8fafc, #e2e8f0, #cbd5e1);
+            --glass-bg: #ffffff; /* Putih bersih */
+            --glass-border: #cbd5e1;
+            --card-bg: #ffffff; /* Putih solid */
+            --text-main: #0f172a; /* Hitam pekat agar jelas */
+            --text-muted: #475569; /* Abu-abu gelap */
+            --accent: #2563eb; /* Biru tegas */
+            --stamp-color: #059669;
+            --panel-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-main);
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            min-height: 100vh;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- THEME TOGGLE --- */
+        .theme-switch {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        #theme-toggle-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 12px;
+            border: 2px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-main);
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--panel-shadow);
+        }
+
+        #theme-toggle-btn:hover {
+            background: var(--accent);
+            color: #ffffff;
+            border-color: transparent;
+        }
+
+        /* --- LAYOUT COMPONENTS --- */
+        .glass-panel {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            box-shadow: var(--panel-shadow);
+            padding: 2.5rem;
+            margin-top: 20px;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 1.8rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+        }
+
+        /* --- STAMP EFFECT --- */
+        .stamp-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(4) rotate(-30deg);
+            opacity: 0;
+            pointer-events: none;
+            border: 6px solid var(--stamp-color);
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: var(--stamp-color);
+            font-weight: 900;
+            font-size: 1.8rem;
+            text-transform: uppercase;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 10;
+            background: rgba(255,255,255,0.1);
+        }
+
+        .stamp-overlay.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1) rotate(-15deg);
+        }
+
+        .card-completed {
+            opacity: 0.6;
+            filter: grayscale(0.3);
+            pointer-events: none;
+        }
+
+        .text-accent {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-modern {
+            background: var(--accent);
+            color: #ffffff !important;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-modern:hover {
+            filter: brightness(1.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-modern {
+            border: 2px solid var(--accent);
+            color: var(--accent) !important;
+            border-radius: 10px;
+            padding: 8px 18px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline-modern:hover {
+            background: var(--accent);
+            color: #ffffff !important;
+        }
+
+        /* --- FORMS --- */
+        .form-select-modern {
+            background-color: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            color: var(--text-main);
+            border-radius: 12px;
+            padding: 12px;
+        }
+
+        /* --- PROGRESS --- */
+        .progress {
+            height: 14px;
+            background-color: rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .progress-bar {
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+        }
+
+        .hidden { display: none !important; }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.5s forwards;
+            opacity: 0;
+            transform: translateY(15px);
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .materi-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- RESPONSIVE DESIGN UNTUK MOBILE/HP --- */
+        @media (max-width: 576px) {
+            .glass-panel {
+                padding: 1.5rem; /* Mengurangi jarak dalam agar tidak sempit */
+                border-radius: 16px;
+            }
+            .glass-card {
+                padding: 1.25rem;
+            }
+            h1.fw-bold {
+                font-size: 1.8rem; /* Mengecilkan judul */
+            }
+            .display-3 {
+                font-size: 3rem; /* Mengecilkan ikon topi toga */
+            }
+            .btn-modern {
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+            .stamp-overlay {
+                font-size: 1.2rem; /* Mengecilkan teks stempel */
+                padding: 5px 15px;
+                border-width: 4px;
+            }
+            .theme-switch {
+                top: 10px;
+                right: 10px;
+            }
+            #theme-toggle-btn {
+                width: 45px;
+                height: 45px;
+                font-size: 1.2rem;
+                border-radius: 10px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<!-- SWITCHER -->
+<div class="theme-switch">
+    <button id="theme-toggle-btn" onclick="toggleTheme()">
+        <i id="theme-icon" class="bi bi-sun-fill"></i>
+    </button>
+</div>
+
+<div class="container py-5">
+    
+    <!-- HEADER -->
+    <div class="text-center mb-5 fade-in-up">
+        <i class="bi bi-mortarboard-fill display-3 text-accent mb-2"></i>
+        <h1 class="fw-bold">Matematika Digital</h1>
+        <h4 class="opacity-75">SMP Avisena</h4>
+    </div>
+
+    <!-- HALAMAN PILIH KELAS -->
+    <div id="halaman-pilih" class="row justify-content-center fade-in-up">
+        <div class="col-md-6 col-lg-5">
+            <div class="glass-panel text-center">
+                <h5 class="mb-4">Pilih kelasmu untuk mulai belajar:</h5>
+                
+                <select id="pilihan-kelas" class="form-select form-select-modern mb-4">
+                    <option value="" selected disabled>-- Pilih Kelas --</option>
+                    <option value="7">Kelas 7 (Tujuh)</option>
+                    <option value="8">Kelas 8 (Delapan)</option>
+                </select>
+                
+                <button class="btn btn-modern w-100 py-3 shadow" onclick="mulaiKelas()">
+                    <i class="bi bi-play-circle me-2"></i> Mulai Pembelajaran
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HALAMAN DAFTAR MATERI -->
+    <div id="halaman-materi" class="hidden">
+        
+        <div class="glass-panel mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 id="judul-kelas" class="m-0 fw-bold text-accent">Materi</h3>
+                <button class="btn btn-sm btn-outline-modern" onclick="kembaliKeAwal()">
+                    <i class="bi bi-arrow-left"></i> Ganti Kelas
+                </button>
+            </div>
+            
+            <div class="d-flex justify-content-between opacity-75 mb-2 small fw-bold">
+                <span>Progres Belajar</span>
+                <span id="text-progress">0%</span>
+            </div>
+            <div class="progress shadow-sm">
+                <div id="bar-progress" class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%"></div>
+            </div>
+        </div>
+        
+        <div id="wadah-materi" class="row g-4">
+            <!-- Isi materi akan muncul di sini -->
+        </div>
+
+        <!-- FOOTER SELESAI -->
+        <div id="tombol-final" class="glass-panel mt-5 text-center hidden fade-in-up">
+            <i class="bi bi-trophy-fill text-accent display-4 mb-3"></i>
+            <h2 class="fw-bold mb-3">Hebat! Materi Selesai 🎉</h2>
+            <p class="mb-4 opacity-75">Klik tombol di bawah untuk melaporkan hasil belajar Anda.</p>
+            <a href="https://forms.google.com" target="_blank" class="btn btn-modern btn-lg px-5">
+                <i class="bi bi-check2-square me-2"></i> Kirim Laporan Tugas
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const databaseMateri = {
+        "7": [
+            { bab: "BAB 1: Aljabar", subBab: "Operasi Suku Sejenis", desc: "Menjumlahkan dan mengurangkan variabel x dan y.", link: "#" },
+            { bab: "BAB 2: SPLSV", subBab: "Pindah Ruas", desc: "Teknik dasar mencari nilai variabel dalam persamaan.", link: "#" },
+            { bab: "BAB 3: Sudut", subBab: "Garis Sejajar", desc: "Memahami hubungan sudut pada dua garis sejajar.", link: "#" }
+        ],
+        "8": [
+            { bab: "BAB 1: PGL", subBab: "Gradien Garis", desc: "Menentukan kemiringan garis (m) dari grafik.", link: "#" },
+            { bab: "BAB 2: Pythagoras", subBab: "Sisi Miring", desc: "Menghitung hipotenusa pada segitiga siku-siku.", link: "#" },
+            { bab: "BAB 3: Statistik", subBab: "Rata-rata (Mean)", desc: "Cara mengolah data nilai tugas harian.", link: "#" }
+        ]
+    };
+
+    let totalMateri = 0;
+    let materiSelesai = 0;
+    let trackKlik = [];
+
+    function toggleTheme() {
+        const body = document.body;
+        const icon = document.getElementById('theme-icon');
+        const isDark = body.getAttribute('data-theme') === 'dark';
+
+        if (isDark) {
+            body.setAttribute('data-theme', 'light');
+            icon.className = 'bi bi-moon-stars-fill';
+        } else {
+            body.setAttribute('data-theme', 'dark');
+            icon.className = 'bi bi-sun-fill';
+        }
+    }
+
+    function mulaiKelas() {
+        const kls = document.getElementById('pilihan-kelas').value;
+        if (!kls) return;
+
+        const data = databaseMateri[kls];
+        totalMateri = data.length;
+        materiSelesai = 0;
+        trackKlik = new Array(totalMateri).fill(false);
+
+        document.getElementById('halaman-pilih').classList.add('hidden');
+        document.getElementById('halaman-materi').classList.remove('hidden');
+        document.getElementById('judul-kelas').innerText = `Kelas ${kls}`;
+        
+        updateProgres();
+        
+        const wadah = document.getElementById('wadah-materi');
+        wadah.innerHTML = '';
+
+        data.forEach((item, index) => {
+            wadah.innerHTML += `
+                <div class="col-12 col-md-6 fade-in-up">
+                    <div id="card-${index}" class="glass-card">
+                        <div id="stamp-${index}" class="stamp-overlay">Tuntas </div>
+                        <div class="mb-3">
+                            <span class="badge bg-primary rounded-pill mb-2">${item.bab}</span>
+                            <h5 class="fw-bold mb-2">${item.subBab}</h5>
+                            <p class="materi-desc mb-0">${item.desc}</p>
+                        </div>
+                        <div class="mt-auto pt-3 border-top border-light border-opacity-10">
+                            <a href="${item.link}" target="_blank" class="btn-outline-modern btn-sm" onclick="selesaiMateri(${index})">
+                                <i class="bi bi-book me-1"></i> Pelajari
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    function selesaiMateri(idx) {
+        if (!trackKlik[idx]) {
+            trackKlik[idx] = true;
+            materiSelesai++;
+            document.getElementById(`stamp-${idx}`).classList.add('show');
+            document.getElementById(`card-${idx}`).classList.add('card-completed');
+            updateProgres();
+            if (materiSelesai === totalMateri) {
+                document.getElementById('tombol-final').classList.remove('hidden');
+            }
+        }
+    }
+
+    function updateProgres() {
+        const persen = Math.round((materiSelesai / totalMateri) * 100) || 0;
+        document.getElementById('bar-progress').style.width = persen + '%';
+        document.getElementById('text-progress').innerText = persen + '%';
+    }
+
+    function kembaliKeAwal() {
+        document.getElementById('halaman-materi').classList.add('hidden');
+        document.getElementById('halaman-pilih').classList.remove('hidden');
+        document.getElementById('tombol-final').classList.add('hidden');
+    }
+</script>
+</body>
+</html>
