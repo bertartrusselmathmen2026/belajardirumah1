@@ -314,7 +314,7 @@
     <div class="popup-content">
         <button class="btn-close-popup" onclick="tutupPopup()"><i class="bi bi-x-lg"></i></button>
         <i class="bi bi-journal-bookmark-fill text-accent display-4 mb-3 d-block"></i>
-        <h4 class="fw-bold mb-3">Tugas Membaca</h4>
+        <h4 class="fw-bold mb-3">Refrensi Belajar</h4>
         <p id="teks-popup" class="mb-4">Teks akan diisi secara dinamis</p>
         <button class="btn btn-modern w-100" onclick="tutupPopup()">Saya Mengerti</button>
     </div>
@@ -357,7 +357,7 @@
             </div>
             
             <div class="d-flex justify-content-between opacity-75 mb-2 small fw-bold">
-                <span>Progres Belajar</span>
+                <span>Progres Belajar Daring</span>
                 <span id="text-progress">0%</span>
             </div>
             <div class="progress shadow-sm">
@@ -382,18 +382,18 @@
 <script>
     const databaseMateri = {
         "7": [
-            { bab: " Kelas 7 : Kesebangunan", subBab: "Video Kesebangunan", desc: "mempelajari dua bangun datar dengan bentuk sama namun ukuran berbeda, di mana sudut bersesuaian sama besar dan sisi bersesuaian memiliki perbandingan senilai.", link: "https://drive.google.com/file/d/1HfCRtRXjpTUwZcT8tHdvtbOm2-gqP2W4/view?usp=drivesdk" },
-            { bab: "Kelas 7 : Pers Garis lurus", subBab: "Materi Pers Garis lurus", desc: "Silakan untuk dipelajari Halaman 27 - 49 di LKS Matematika", link: "javascript:void(0)", isPopup: true },
-            { bab: "Tugas siswa : Kesebangunan", subBab: "Tugas yang Dikumpulkan", desc: "Silakan kerjakan soal latihan di buku tugas masing-masing. Setelah selesai, foto hasil pekerjaan kalian dan unggah di kolom tugas dibawah ini.<br> <br><strong>Catatan : </strong> Saat mengerjakan tugas, tolong difoto juga proses pengerjaannya ya.", link: "#" }
+            { bab: " Kelas 7 : Kesebangunan", subBab: "Video Kesebangunan", desc: "mempelajari dua bangun dengan bentuk sama namun ukuran berbeda, di mana sudut bersesuaian sama besar dan sisi bersesuaian memiliki perbandingan senilai.", link: "https://drive.google.com/file/d/10ekLeDgqx8L1csP1N9uRtFw5abw7z7gU/view?usp=sharing" },
+            { bab: "Kelas 7 : Pers Garis lurus", subBab: "Materi Pers Garis lurus", desc: "Silakan dipelajari Halaman 27 - 49 di LKS Matematika Kelas 7", link: "javascript:void(0)", isPopup: true },
+            { bab: "Tugas siswa : Dikumpulkan", subBab: "⚠️Unduh Soal Tugas", desc: "Silakan kerjakan soal latihan di buku tugas masing-masing. Setelah selesai, foto hasil pekerjaan kalian dan unggah di kolom tugas dibawah ini.<br><br><strong>Catatan : </strong> Saat mengerjakan tugas, tolong difoto juga proses pengerjaannya ya.", link: "https://drive.google.com/file/d/1fwj8o-BNE6QGC8drrAC0fmF1s8xD8PJx/view?usp=sharing" }
         ],
         "8": [
             { bab: "Kelas 8 : Pers Garis lurus", subBab: "Penerapan Pers Garis Lurus", desc: "Persamaan garis lurus merupakan persamaan linier dua variabel dengan dua variabel yang tidak diketahui. Adapun sifat-sifat persamaan garis lurus", link: "https://www.youtube.com/watch?v=3cgkXpKqWmU" },
             
             // Perubahan ada di baris ini. Menambahkan isPopup: true dan merubah link agar tidak lari ke halaman baru
-            { bab: "Kelas 8 : Pers Garis lurus", subBab: "Materi Pers Garis lurus", desc: "Silakan untuk dipelajari Halaman 24 - 47 di LKS Matematika", link: "javascript:void(0)", isPopup: true },
+            { bab: "Kelas 8 : Pers Garis lurus", subBab: "Materi Pers Garis lurus", desc: "Silakan dipelajari Halaman 24 - 47 di LKS Matematika Kelas 8", link: "javascript:void(0)", isPopup: true },
             
-            { bab: "Kelas 8 : Pers Garis lurus", subBab: "Latihan mengerjakan soal", desc: "konsep matematika abstrak dengan penerapan teknologi sehari-hari.", link: "https://gemini.google.com/share/487266e4059c" },
-            { bab: "Tugas siswa : Pers Garis lurus", subBab: "Tugas yang Dikumpulkan", desc: "Silakan kerjakan soal latihan di buku tugas masing-masing. Setelah selesai, foto hasil pekerjaan kalian dan unggah di kolom tugas dibawah ini.<br> <br><strong>Catatan : </strong> Saat mengerjakan tugas, tolong difoto juga proses pengerjaannya ya.", link: "https://drive.google.com/file/d/1r4mr4CigbkmMXLU-znGf5zhlrezvUPpW/view?usp=sharing" }
+            { bab: "Kelas 8 : Pers Garis lurus", subBab: "Latihan soal dan pembahasan", desc: "konsep matematika abstrak dengan penerapan teknologi sehari-hari.", link: "https://gemini.google.com/share/487266e4059c" },
+            { bab: "Tugas siswa : Dikumpulkan", subBab: "⚠️Unduh Soal Tugas", desc: "Silakan kerjakan soal latihan di buku tugas masing-masing. Setelah selesai, foto hasil pekerjaan kalian dan unggah di kolom tugas dibawah ini.<br><br><strong>Catatan : </strong> Saat mengerjakan tugas, tolong difoto juga proses pengerjaannya ya.", link: "https://drive.google.com/file/d/1r4mr4CigbkmMXLU-znGf5zhlrezvUPpW/view?usp=sharing" }
         ]
     };
 
