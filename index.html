@@ -178,6 +178,43 @@
       color: var(--accent);
     }
 
+    /* === CSS NOTIFIKASI TERKUNCI === */
+    .locked-notice-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 12px;
+      padding: 1.2rem;
+      margin-top: 1.5rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      line-height: 1.5;
+      text-align: left;
+      transition: all 0.4s ease;
+    }
+
+    [data-theme="light"] .locked-notice-box {
+      background: rgba(15, 23, 42, 0.02);
+      border: 1px dashed rgba(15, 23, 42, 0.18);
+    }
+
+    .locked-notice-box.hidden {
+      display: none !important;
+    }
+
+    .text-accent-soft {
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 0.6rem;
+      display: block;
+    }
+
+    .btn-locked {
+      opacity: 0.4;
+      pointer-events: none;
+      filter: grayscale(0.8);
+    }
+    /* =============================== */
+
     .btn-modern {
       background: var(--accent);
       color: #ffffff !important;
@@ -217,21 +254,6 @@
       box-shadow: var(--btn-shadow-hover);
     }
 
-    /* Penambahan class untuk tombol materi yang terkunci / countdown */
-    .btn-locked {
-      opacity: 0.5;
-      pointer-events: none;
-      cursor: not-allowed;
-      filter: grayscale(1);
-    }
-
-    .btn-icon-only {
-      width: 45px;
-      height: 45px;
-      padding: 0;
-      border-radius: 50%;
-    }
-
     .btn-square-back {
       min-width: 132px;
       height: 48px;
@@ -266,11 +288,6 @@
     .btn-square-back .btn-label {
       font-size: 0.92rem;
       font-weight: 600;
-      line-height: 1;
-    }
-
-    .btn-square-back .btn-icon-small {
-      font-size: 1rem;
       line-height: 1;
     }
 
@@ -377,13 +394,6 @@
       box-shadow: var(--btn-shadow);
     }
 
-    .btn-close-popup:hover {
-      color: var(--accent);
-      background: var(--card-bg);
-      transform: scale(1.05);
-      box-shadow: var(--btn-shadow-hover);
-    }
-
     .neon-card {
       position: relative;
       border-radius: 20px;
@@ -440,7 +450,6 @@
       padding: 0.85rem 0.75rem;
       background: rgba(255, 255, 255, 0.02);
       backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
     }
 
     [data-theme="light"] .status-item {
@@ -482,82 +491,14 @@
       width: 100%;
     }
 
-    #btn-ganti-kelas {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      z-index: 1000;
-    }
-
     @media (max-width: 576px) {
-      .glass-panel {
-        padding: 1.5rem;
-        border-radius: 16px;
-      }
-
-      .glass-card {
-        padding: 1.5rem;
-      }
-
-      h1.fw-bold {
-        font-size: 1.8rem;
-      }
-
-      .display-3 {
-        font-size: 3rem;
-      }
-
-      .theme-switch {
-        top: 15px;
-        right: 15px;
-      }
-
-      #theme-toggle-btn {
-        width: 45px;
-        height: 45px;
-        font-size: 1.1rem;
-      }
-
-      #btn-ganti-kelas {
-        top: 15px;
-        left: 15px;
-      }
-
-      .btn-square-back {
-        min-width: 110px;
-        height: 42px;
-        padding: 0 12px;
-        border-radius: 12px;
-      }
-
-      .popup-content {
-        padding: 2rem 1.4rem;
-      }
-
-      .neon-card {
-        padding: 1.1rem;
-      }
-
-      .neon-card-title {
-        font-size: clamp(1.95rem, 8.8vw, 2.8rem);
-      }
-
-      .neon-status-grid {
-        gap: 0.5rem;
-      }
-
-      .status-item {
-        padding: 0.7rem 0.5rem;
-        border-radius: 14px;
-      }
-
-      .status-label {
-        font-size: 0.8rem;
-      }
-
-      .status-value {
-        font-size: 1.05rem;
-      }
+      .glass-panel { padding: 1.5rem; border-radius: 16px; }
+      .glass-card { padding: 1.5rem; }
+      .theme-switch { top: 15px; right: 15px; }
+      #theme-toggle-btn { width: 45px; height: 45px; font-size: 1.1rem; }
+      #btn-ganti-kelas { top: 15px; left: 15px; }
+      .btn-square-back { min-width: 110px; height: 42px; padding: 0 12px; border-radius: 12px; }
+      .popup-content { padding: 2rem 1.4rem; }
     }
   </style>
 </head>
@@ -702,7 +643,6 @@
     let totalMateri = 0;
     let materiSelesai = 0;
     let trackKlik = [];
-    let timerInterval = null; // Menampung fungsi countdown
 
     function toggleTheme() {
         const body = document.body;
@@ -716,15 +656,11 @@
             body.setAttribute('data-theme', 'dark');
             icon.className = 'bi bi-sun-fill';
         }
-        updateProgres();
     }
 
     function mulaiKelas() {
         const kls = document.getElementById('pilihan-kelas').value;
         if (!kls) return;
-
-        // Bersihkan interval jika sebelumnya ada materi yang sedang di-countdown
-        if (timerInterval) clearInterval(timerInterval);
 
         const data = databaseMateri[kls];
         totalMateri = data.length;
@@ -736,26 +672,29 @@
         document.getElementById('btn-ganti-kelas').classList.remove('hidden');
         
         document.getElementById('judul-kelas').innerText = `Kelas ${kls}`;
-
         updateProgres();
 
         const wadah = document.getElementById('wadah-materi');
         wadah.innerHTML = '';
 
         data.forEach((item, index) => {
-            // Logika Kunci: Jika bukan materi pertama (index > 0), maka tombol di-lock
-            const isLocked = index > 0;
-            const lockedClass = isLocked ? " btn-locked" : "";
-            
-            const teksIkonTombol = isLocked ? `<i class="bi bi-lock-fill me-2"></i> Terkunci` :
-                 (item.isPopup ? `<i class="bi bi-book me-2"></i> Pelajari Materi` : `<i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan`);
+            const isLocked = index > 0; // Kunci materi selain yang pertama
+
+            // Membuat Kotak Notifikasi
+            const noticeBox = `
+                <div id="notice-${index}" class="locked-notice-box ${!isLocked ? 'hidden' : ''}">
+                    <span class="fw-bold">Materi terkunci.</span> 
+                    <span class="text-opacity">Selesaikan materi sebelumnya terlebih dahulu.</span>
+                    <span id="notice-status-${index}" class="text-accent-soft">Menunggu materi sebelumnya selesai.</span>
+                </div>
+            `;
 
             const btnAction = item.isPopup
-                ? `<a href="javascript:void(0)" id="btn-materi-${index}" class="btn-outline-modern w-100 mt-3${lockedClass}" onclick='bukaPopup(${JSON.stringify(item.desc)}, ${JSON.stringify(item.popupTitle || "Referensi Belajar")}, ${JSON.stringify(item.popupIcon || "bi-journal-text")}, ${JSON.stringify(item.popupButton || "Tutup")}); selesaiMateri(${index})'>
-                    ${teksIkonTombol}
+                ? `<a href="javascript:void(0)" id="btn-materi-${index}" class="btn-outline-modern w-100 ${isLocked ? 'btn-locked' : ''}" onclick='bukaPopup(${JSON.stringify(item.desc)}, ${JSON.stringify(item.popupTitle || "Referensi Belajar")}, ${JSON.stringify(item.popupIcon || "bi-journal-text")}, ${JSON.stringify(item.popupButton || "Tutup")}); selesaiMateri(${index})'>
+                    <i class="bi bi-book me-2"></i> Pelajari Materi
                    </a>`
-                : `<a href="${item.link}" target="_blank" id="btn-materi-${index}" class="btn-outline-modern w-100 mt-3${lockedClass}" onclick="selesaiMateri(${index})">
-                    ${teksIkonTombol}
+                : `<a href="${item.link}" target="_blank" id="btn-materi-${index}" class="btn-outline-modern w-100 ${isLocked ? 'btn-locked' : ''}" onclick="selesaiMateri(${index})">
+                    <i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan
                    </a>`;
 
             wadah.innerHTML += `
@@ -768,6 +707,7 @@
                             <p class="materi-desc mb-0">${item.desc}</p>
                         </div>
                         <div class="mt-auto">
+                            ${noticeBox}
                             ${btnAction}
                         </div>
                     </div>
@@ -788,43 +728,35 @@
                 setTimeout(() => {
                     document.getElementById('tombol-final').classList.remove('hidden');
                 }, 500);
-            } else {
-                // Jalankan fungsi countdown untuk membuka materi berikutnya
-                mulaiCountdown(idx + 1);
+            } else if (idx + 1 < totalMateri) {
+                // Menjalankan countdown ke materi selanjutnya
+                jalankanCountdown(idx + 1);
             }
         }
     }
 
-    function mulaiCountdown(nextIdx) {
-        const btnNext = document.getElementById(`btn-materi-${nextIdx}`);
-        if (!btnNext) return;
+    function jalankanCountdown(nextIdx) {
+        const btn = document.getElementById(`btn-materi-${nextIdx}`);
+        const notice = document.getElementById(`notice-${nextIdx}`);
+        const noticeStatus = document.getElementById(`notice-status-${nextIdx}`);
+        let s = 30; // Waktu countdown buka kunci (60 detik)
 
-        let waktuTunggu = 30; // Set 60 detik
-        btnNext.innerHTML = `<i class="bi bi-hourglass-split me-2"></i> Tunggu ${waktuTunggu} detik`;
+        if (noticeStatus) {
+            noticeStatus.innerHTML = `<i class="bi bi-unlock-fill me-1"></i> Membuka materi dalam ${s} detik...`;
+        }
 
-        // Mencegah timer ganda berjalan bersamaan
-        if (timerInterval) clearInterval(timerInterval);
-
-        timerInterval = setInterval(() => {
-            waktuTunggu--;
-            
-            if (waktuTunggu > 0) {
-                btnNext.innerHTML = `<i class="bi bi-hourglass-split me-2"></i> Tunggu ${waktuTunggu} detik`;
-            } else {
-                // Hentikan timer dan buka kunci
-                clearInterval(timerInterval);
-                btnNext.classList.remove('btn-locked');
-
-                // Kembalikan ikon & teks sesuai dengan database tipe materi aslinya
-                const kls = document.getElementById('pilihan-kelas').value;
-                const item = databaseMateri[kls][nextIdx];
-                if (item.isPopup) {
-                    btnNext.innerHTML = `<i class="bi bi-book me-2"></i> Pelajari Materi`;
-                } else {
-                    btnNext.innerHTML = `<i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan`;
-                }
+        const timerInterval = setInterval(() => {
+            s--;
+            if (noticeStatus) {
+                noticeStatus.innerHTML = `<i class="bi bi-unlock-fill me-1"></i> Membuka materi dalam ${s} detik...`;
             }
-        }, 1000); // 1000ms = 1 detik
+
+            if (s <= 0) {
+                clearInterval(timerInterval);
+                if (btn) btn.classList.remove('btn-locked');
+                if (notice) notice.classList.add('hidden'); // Sembunyikan notif jika countdown habis
+            }
+        }, 1000);
     }
 
     function updateProgres() {
@@ -838,9 +770,6 @@
     }
 
     function kembaliKeAwal() {
-        // Hentikan timer yang sedang berjalan saat kembali ke menu awal
-        if (timerInterval) clearInterval(timerInterval);
-        
         document.getElementById('halaman-materi').classList.add('hidden');
         document.getElementById('halaman-pilih').classList.remove('hidden');
         document.getElementById('tombol-final').classList.add('hidden');
