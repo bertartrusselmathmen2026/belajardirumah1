@@ -7,24 +7,22 @@
   <title>Belajar Matematika Daring</title>
   <meta name="description" content="Platform belajar matematika daring kelas 7 dan 8. Materi, video, referensi, dan tugas bisa diakses langsung dari rumah.">
 
-  <!-- Open Graph / WhatsApp Preview -->
   <meta property="og:locale" content="id_ID" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="SMP Avisena Jabon" />
   <meta property="og:title" content="Belajar Matematika Paling Seru!" />
-  <meta property="og:description" content="Platform daring untuk kelas 7 dan 8. Materi, video, referensi, dan tugas bisa diakses langsung dari rumah." />
+  <meta property="og:description" content="Platform matematika daring untuk kelas 7 dan 8." />
   <meta property="og:url" content="https://bertartrusselmathmen2026.github.io/belajardirumah1/" />
   <meta property="og:image" content="https://thumbs.dreamstime.com/b/online-math-course-learning-mathematics-internet-idea-distance-education-knowledge-science-technology-engineering-181650713.jpg" />
-  <meta property="og:image:secure_url" content="https://i.pinimg.com/736x/20/e8/84/20e8841f5affea0cb88ca9e171eda985.jpg" />
-  <meta property="og:image:type" content="image/jpeg/jpg" />
+  <meta property="og:image:secure_url" content="https://puspresnas.id/img/Matematika2017.png" />
+  <meta property="og:image:type" content="image/jpeg/jpg/png" />
   <meta property="og:image:width" content="736" />
   <meta property="og:image:height" content="1104" />
 
-  <!-- Twitter / fallback preview -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="🎓 Belajar Matematika Jadi Mudah & Seru!" />
-  <meta name="twitter:description" content="Platform belajar matematika daring kelas 7 dan 8. Materi, video, referensi, dan tugas bisa diakses langsung dari rumah." />
-  <meta name="twitter:image" content="https://i.pinimg.com/736x/20/e8/84/20e8841f5affea0cb88ca9e171eda985.jpg" />
+  <meta name="twitter:title" content="Belajar Matematika Paling Seru!" />
+  <meta name="twitter:description" content="Platform matematika daring untuk kelas 7 dan 8." />
+  <meta name="twitter:image" content="https://puspresnas.id/img/Matematika2017.png" />
 
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -217,6 +215,14 @@
       color: #ffffff !important;
       transform: translateY(-2px);
       box-shadow: var(--btn-shadow-hover);
+    }
+
+    /* Penambahan class untuk tombol materi yang terkunci / countdown */
+    .btn-locked {
+      opacity: 0.5;
+      pointer-events: none;
+      cursor: not-allowed;
+      filter: grayscale(1);
     }
 
     .btn-icon-only {
@@ -696,6 +702,7 @@
     let totalMateri = 0;
     let materiSelesai = 0;
     let trackKlik = [];
+    let timerInterval = null; // Menampung fungsi countdown
 
     function toggleTheme() {
         const body = document.body;
@@ -709,13 +716,15 @@
             body.setAttribute('data-theme', 'dark');
             icon.className = 'bi bi-sun-fill';
         }
-        // Update circle color dynamically on theme switch
         updateProgres();
     }
 
     function mulaiKelas() {
         const kls = document.getElementById('pilihan-kelas').value;
         if (!kls) return;
+
+        // Bersihkan interval jika sebelumnya ada materi yang sedang di-countdown
+        if (timerInterval) clearInterval(timerInterval);
 
         const data = databaseMateri[kls];
         totalMateri = data.length;
@@ -726,7 +735,6 @@
         document.getElementById('halaman-materi').classList.remove('hidden');
         document.getElementById('btn-ganti-kelas').classList.remove('hidden');
         
-        // Update judul kartu sesuai referensi (contoh: Matematika - Kelas 7A)
         document.getElementById('judul-kelas').innerText = `Kelas ${kls}`;
 
         updateProgres();
@@ -735,12 +743,19 @@
         wadah.innerHTML = '';
 
         data.forEach((item, index) => {
+            // Logika Kunci: Jika bukan materi pertama (index > 0), maka tombol di-lock
+            const isLocked = index > 0;
+            const lockedClass = isLocked ? " btn-locked" : "";
+            
+            const teksIkonTombol = isLocked ? `<i class="bi bi-lock-fill me-2"></i> Terkunci` :
+                 (item.isPopup ? `<i class="bi bi-book me-2"></i> Pelajari Materi` : `<i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan`);
+
             const btnAction = item.isPopup
-                ? `<a href="javascript:void(0)" class="btn-outline-modern w-100 mt-3" onclick='bukaPopup(${JSON.stringify(item.desc)}, ${JSON.stringify(item.popupTitle || "Referensi Belajar")}, ${JSON.stringify(item.popupIcon || "bi-journal-text")}, ${JSON.stringify(item.popupButton || "Tutup")}); selesaiMateri(${index})'>
-                    <i class="bi bi-book me-2"></i> Pelajari Materi
+                ? `<a href="javascript:void(0)" id="btn-materi-${index}" class="btn-outline-modern w-100 mt-3${lockedClass}" onclick='bukaPopup(${JSON.stringify(item.desc)}, ${JSON.stringify(item.popupTitle || "Referensi Belajar")}, ${JSON.stringify(item.popupIcon || "bi-journal-text")}, ${JSON.stringify(item.popupButton || "Tutup")}); selesaiMateri(${index})'>
+                    ${teksIkonTombol}
                    </a>`
-                : `<a href="${item.link}" target="_blank" class="btn-outline-modern w-100 mt-3" onclick="selesaiMateri(${index})">
-                    <i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan
+                : `<a href="${item.link}" target="_blank" id="btn-materi-${index}" class="btn-outline-modern w-100 mt-3${lockedClass}" onclick="selesaiMateri(${index})">
+                    ${teksIkonTombol}
                    </a>`;
 
             wadah.innerHTML += `
@@ -768,12 +783,48 @@
             document.getElementById(`stamp-${idx}`).classList.add('show');
             document.getElementById(`card-${idx}`).classList.add('card-completed');
             updateProgres();
+            
             if (materiSelesai === totalMateri) {
                 setTimeout(() => {
                     document.getElementById('tombol-final').classList.remove('hidden');
                 }, 500);
+            } else {
+                // Jalankan fungsi countdown untuk membuka materi berikutnya
+                mulaiCountdown(idx + 1);
             }
         }
+    }
+
+    function mulaiCountdown(nextIdx) {
+        const btnNext = document.getElementById(`btn-materi-${nextIdx}`);
+        if (!btnNext) return;
+
+        let waktuTunggu = 60; // Set 60 detik
+        btnNext.innerHTML = `<i class="bi bi-hourglass-split me-2"></i> Tunggu ${waktuTunggu} detik`;
+
+        // Mencegah timer ganda berjalan bersamaan
+        if (timerInterval) clearInterval(timerInterval);
+
+        timerInterval = setInterval(() => {
+            waktuTunggu--;
+            
+            if (waktuTunggu > 0) {
+                btnNext.innerHTML = `<i class="bi bi-hourglass-split me-2"></i> Tunggu ${waktuTunggu} detik`;
+            } else {
+                // Hentikan timer dan buka kunci
+                clearInterval(timerInterval);
+                btnNext.classList.remove('btn-locked');
+
+                // Kembalikan ikon & teks sesuai dengan database tipe materi aslinya
+                const kls = document.getElementById('pilihan-kelas').value;
+                const item = databaseMateri[kls][nextIdx];
+                if (item.isPopup) {
+                    btnNext.innerHTML = `<i class="bi bi-book me-2"></i> Pelajari Materi`;
+                } else {
+                    btnNext.innerHTML = `<i class="bi bi-box-arrow-up-right me-2"></i> Buka Tautan`;
+                }
+            }
+        }, 1000); // 1000ms = 1 detik
     }
 
     function updateProgres() {
@@ -787,6 +838,9 @@
     }
 
     function kembaliKeAwal() {
+        // Hentikan timer yang sedang berjalan saat kembali ke menu awal
+        if (timerInterval) clearInterval(timerInterval);
+        
         document.getElementById('halaman-materi').classList.add('hidden');
         document.getElementById('halaman-pilih').classList.remove('hidden');
         document.getElementById('tombol-final').classList.add('hidden');
