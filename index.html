@@ -491,6 +491,41 @@
       width: 100%;
     }
 
+
+    .popup-square {
+      width: min(90vw, 380px);
+      aspect-ratio: 1 / 1;
+      background: var(--card-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: var(--panel-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popup-square .popup-image-wrapper {
+      flex: 1;
+      width: 100%;
+      overflow: hidden;
+      background: #0b1220;
+    }
+
+    .popup-square .popup-image-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .popup-square .popup-footer {
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
     @media (max-width: 576px) {
       .glass-panel { padding: 1.5rem; border-radius: 16px; }
       .glass-card { padding: 1.5rem; }
@@ -526,6 +561,25 @@
         <button id="btn-popup-action" class="btn btn-modern w-100" onclick="tutupPopup()" type="button">Tutup</button>
     </div>
 </div>
+
+<div id="popup-awal" class="popup-overlay" onclick="if(event.target===this) tutupPopupAwal()">
+    <div class="popup-square">
+        <button class="btn-close-popup" onclick="tutupPopupAwal()" aria-label="Tutup Popup" type="button">
+            <i class="bi bi-x-lg"></i>
+        </button>
+
+        <div class="popup-image-wrapper">
+            <img src="https://scontent.fsub11-1.fna.fbcdn.net/v/t1.6435-9/120194929_2836151326709852_4474590783058972104_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=13d280&_nc_ohc=fYSWiaRgHoYQ7kNvwFBvJlC&_nc_oc=Adp0ePfdlw3bEaxvRXHs1vASXOTulYOfU8ewTxykU-dSc8Eg17bdRCc08inrOIlGSK6kYqXpOLL5nwbk_AfI0Qtg&_nc_zt=23&_nc_ht=scontent.fsub11-1.fna&_nc_gid=WH2cLSQ1Z3cqf1Etiup16w&_nc_ss=7a389&oh=00_Af3CbyXWNxFrpczaEfjU6nw0BGwja8U0Wdti-hEwvh8xlg&oe=6A095242" alt="Informasi Awal">
+        </div>
+
+        <div class="popup-footer">
+            <button id="btn-popup-awal" class="btn btn-modern w-100" onclick="tutupPopupAwal()" type="button">
+                Tutup
+            </button>
+        </div>
+    </div>
+</div>
+
 
 <div class="container py-5">
     <div class="text-center mb-5 fade-in-up">
@@ -683,8 +737,8 @@
             // Membuat Kotak Notifikasi
             const noticeBox = `
                 <div id="notice-${index}" class="locked-notice-box ${!isLocked ? 'hidden' : ''}">
-                    <span class="fw-bold">Materi terkunci</span> 
-                    <span class="text-opacity">Pelajari materi sebelumnya untuk membuka.</span>
+                    <span class="fw-bold">Materi terkunci.</span> 
+                    <span class="text-opacity">Selesaikan materi sebelumnya terlebih dahulu.</span>
                     <span id="notice-status-${index}" class="text-accent-soft">Menunggu materi sebelumnya selesai.</span>
                 </div>
             `;
@@ -776,6 +830,27 @@
         document.getElementById('pilihan-kelas').value = "";
         document.getElementById('btn-ganti-kelas').classList.add('hidden');
     }
+
+
+    function tampilkanPopupAwal() {
+        const popup = document.getElementById('popup-awal');
+        if (popup) {
+            popup.classList.add('show');
+        }
+    }
+
+    function tutupPopupAwal() {
+        const popup = document.getElementById('popup-awal');
+        if (popup) {
+            popup.classList.remove('show');
+        }
+    }
+
+    window.addEventListener('load', function () {
+        setTimeout(() => {
+            tampilkanPopupAwal();
+        }, 500);
+    });
 
     function bukaPopup(teksMateri, judulPopup = "Referensi Belajar", ikonPopup = "bi-journal-text", tombolText = "Tutup") {
         document.getElementById('teks-popup').innerHTML = teksMateri;
